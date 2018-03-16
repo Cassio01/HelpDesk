@@ -2,11 +2,15 @@ package com.devfull.springdata.api.security.jwt;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtTokenUtil implements Serializable {
 
@@ -20,7 +24,7 @@ public class JwtTokenUtil implements Serializable {
 	private String secret;
 
 	@Value("${jwt.expiration}")
-	private String expiration;
+	private Long expiration;
 
 	public String getNomeUsuarioFromToken(String token) {
 		String nomeUsuario;
@@ -61,5 +65,49 @@ public class JwtTokenUtil implements Serializable {
 	private Boolean isTokenExpired(String token) {
 		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
+	}
+	
+	public String generateToken(UserDetails userDetails) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+		final Date createdDate = new Date();
+		claims.put(CLAIM_KEY_CREATED, createdDate);
+		
+		return doGenerateToken(claims);
+	}
+	
+	private String doGenerateToken(Map<String, Object> claims) {
+		final Date createdDate = (Date) claims.get(CLAIM_KEY_CREATED);
+		final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
+		
+		return Jwts.builder()
+				.setClaims(claims)
+				.setExpiration(expirationDate)
+				.signWith(SignatureAlgorithm.HS512, secret)
+				.compact();
+		
+	}
+	
+	public Boolean canTokenRefreshed(String token) {
+		return (!isTokenExpired(token));
+		
+	}
+	
+	public String refreshToken(String token) {
+		String refreshedToken;
+		try {
+			final Claims claims = getClaimsFromToken(token);
+			claims.put(CLAIM_KEY_CREATED, new Date());
+			refreshedToken = doGenerateToken(claims);
+		} catch (Exception e) {
+			refreshedToken = null;
+		}
+		return refreshedToken;
+	}
+	
+	public Boolean validateToken(String token, UserDetails userDetails) {
+		JwtUsuario user = (JwtUsuario) userDetails;
+		final String username = getNomeUsuarioFromToken(token);
+		return (username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
 }
