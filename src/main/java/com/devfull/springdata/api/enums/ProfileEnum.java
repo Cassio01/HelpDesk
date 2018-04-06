@@ -1,8 +1,8 @@
 package com.devfull.springdata.api.enums;
 
-public enum TipoEnum {
+public enum ProfileEnum {
 
 	ROLE_ADMIN,
-	ROLE_CLIENTE,
-	ROLE_TECNICO
+	ROLE_CUSTOMER,
+	ROLE_TECHNICAL
 }
