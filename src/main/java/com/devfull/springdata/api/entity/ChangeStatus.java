@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.devfull.springdata.api.enums.StatusEnum;
 
 @Document
-public class AlteraStatus {
+public class ChangeStatus {
 
 	@Id
 	private String id;
@@ -17,9 +17,10 @@ public class AlteraStatus {
 	@DBRef
 	private Ticket ticket;
 
-	private Usuario usuarioAlteraStatus;
+	@DBRef
+	private User userChange;
 
-	private Date dataAlteraStatus;
+	private Date dateChangeStatus;
 
 	private StatusEnum status;
 
@@ -39,20 +40,20 @@ public class AlteraStatus {
 		this.ticket = ticket;
 	}
 
-	public Usuario getUsuarioAlteraStatus() {
-		return usuarioAlteraStatus;
+	public User getUserChange() {
+		return userChange;
 	}
 
-	public void setUsuarioAlteraStatus(Usuario usuarioAlteraStatus) {
-		this.usuarioAlteraStatus = usuarioAlteraStatus;
+	public void setUserChange(User userChange) {
+		this.userChange = userChange;
 	}
 
-	public Date getDataAlteraStatus() {
-		return dataAlteraStatus;
+	public Date getDateChangeStatus() {
+		return dateChangeStatus;
 	}
 
-	public void setDataAlteraStatus(Date dataAlteraStatus) {
-		this.dataAlteraStatus = dataAlteraStatus;
+	public void setDateChangeStatus(Date dateChangeStatus) {
+		this.dateChangeStatus = dateChangeStatus;
 	}
 
 	public StatusEnum getStatus() {

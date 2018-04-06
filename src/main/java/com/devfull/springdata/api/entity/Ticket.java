@@ -4,10 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.devfull.springdata.api.enums.PrioridadeEnum;
+import com.devfull.springdata.api.enums.PriorityEnum;
 import com.devfull.springdata.api.enums.StatusEnum;
 
 @Document
@@ -17,26 +18,27 @@ public class Ticket {
 	private String id;
 
 	@DBRef(lazy = true)
-	private Usuario usuario;
+	private User user;
 
-	private Date data;
+	private Date date;
 
-	private String titulo;
+	private String title;
 
-	private Integer numero;
+	private Integer number;
 
 	private StatusEnum status;
 
-	private PrioridadeEnum prioridade;
+	private PriorityEnum priority;
 
 	@DBRef(lazy = true)
-	private Usuario solicitacaoUsuario;
+	private User assingedUser;
 
-	private String descricao;
+	private String desciption;
 
-	private String imagem;
+	private String image;
 
-	private List<AlteraStatus> alteracoes;
+	@Transient
+	private List<ChangeStatus> changes;
 
 	public String getId() {
 		return id;
@@ -46,36 +48,36 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
-	public String getTitulo() {
-		return titulo;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public Integer getNumero() {
-		return numero;
+	public Integer getNumber() {
+		return number;
 	}
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 
 	public StatusEnum getStatus() {
@@ -86,44 +88,44 @@ public class Ticket {
 		this.status = status;
 	}
 
-	public PrioridadeEnum getPrioridade() {
-		return prioridade;
+	public PriorityEnum getPriority() {
+		return priority;
 	}
 
-	public void setPrioridade(PrioridadeEnum prioridade) {
-		this.prioridade = prioridade;
+	public void setPriority(PriorityEnum priority) {
+		this.priority = priority;
 	}
 
-	public Usuario getSolicitacaoUsuario() {
-		return solicitacaoUsuario;
+	public User getAssingedUser() {
+		return assingedUser;
 	}
 
-	public void setSolicitacaoUsuario(Usuario solicitacaoUsuario) {
-		this.solicitacaoUsuario = solicitacaoUsuario;
+	public void setAssingedUser(User assingedUser) {
+		this.assingedUser = assingedUser;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getDesciption() {
+		return desciption;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setDesciption(String desciption) {
+		this.desciption = desciption;
 	}
 
-	public String getImagem() {
-		return imagem;
+	public String getImage() {
+		return image;
 	}
 
-	public void setImagem(String imagem) {
-		this.imagem = imagem;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
-	public List<AlteraStatus> getAlteracoes() {
-		return alteracoes;
+	public List<ChangeStatus> getChanges() {
+		return changes;
 	}
 
-	public void setAlteracoes(List<AlteraStatus> alteracoes) {
-		this.alteracoes = alteracoes;
+	public void setChanges(List<ChangeStatus> changes) {
+		this.changes = changes;
 	}
 
 }

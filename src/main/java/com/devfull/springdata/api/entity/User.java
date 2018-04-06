@@ -1,17 +1,17 @@
 package com.devfull.springdata.api.entity;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.devfull.springdata.api.enums.TipoEnum;
+import com.devfull.springdata.api.enums.ProfileEnum;
 
 @Document
-public class Usuario {
+public class User {
 
 	@Id
 	private String id;
@@ -23,9 +23,9 @@ public class Usuario {
 
 	@NotEmpty(message = "Informe uma senha")
 	@Size(min = 6)
-	private String senha;
+	private String password;
 
-	private TipoEnum tipo;
+	private ProfileEnum profile;
 
 	public String getId() {
 		return id;
@@ -43,20 +43,19 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public TipoEnum getTipo() {
-		return tipo;
+	public ProfileEnum getProfile() {
+		return profile;
 	}
 
-	public void setTipo(TipoEnum tipo) {
-		this.tipo = tipo;
+	public void setProfile(ProfileEnum profile) {
+		this.profile = profile;
 	}
-
 }
