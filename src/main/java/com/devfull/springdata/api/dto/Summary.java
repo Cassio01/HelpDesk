@@ -1,10 +1,7 @@
 package com.devfull.springdata.api.dto;
 
-import java.io.Serializable;
+public class Summary {
 
-public class Summary implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 
 	private Integer amountNew;
 	private Integer amountResolved;

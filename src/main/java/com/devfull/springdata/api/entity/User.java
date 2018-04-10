@@ -1,5 +1,7 @@
 package com.devfull.springdata.api.entity;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -11,7 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.devfull.springdata.api.enums.ProfileEnum;
 
 @Document
-public class User {
+public class User implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String id;

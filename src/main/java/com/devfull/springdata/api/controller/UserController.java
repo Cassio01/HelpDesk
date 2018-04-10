@@ -31,128 +31,110 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@PostMapping
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Response<User>> create(HttpServletRequest request, @RequestBody User user, 
-			BindingResult result){
+	public ResponseEntity<Response<User>> create(HttpServletRequest request, @RequestBody User user,
+			BindingResult result) {
 		Response<User> response = new Response<User>();
-		
+
 		try {
 			validateCreateUser(user, result);
-			if(result.hasErrors()) {
+			if (result.hasErrors()) {
 				result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
 				return ResponseEntity.badRequest().body(response);
 			}
-			
+
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			User userPersisted = (User) userService.createOrUpdate(user);
 			response.setData(userPersisted);
-		}catch(DuplicateKeyException duplicate) {
+		} catch (DuplicateKeyException duplicate) {
 			response.getErrors().add("Email já registrado!");
 			return ResponseEntity.badRequest().body(response);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			response.getErrors().add(e.getMessage());
+			System.out.println("Erro 2 au tentar cadastrar");
 			return ResponseEntity.badRequest().body(response);
 		}
-		
+
 		return ResponseEntity.ok(response);
 	}
-	
+
 	private void validateCreateUser(User user, BindingResult result) {
-		if(user.getEmail() == null) {
+		if (user.getEmail() == null) {
 			result.addError(new ObjectError("User", "Email não informado"));
 		}
 	}
-	
+
 	@PutMapping
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Response<User>> update(HttpServletRequest request, @RequestBody User user, 
-			BindingResult result){
+	public ResponseEntity<Response<User>> update(HttpServletRequest request, @RequestBody User user,
+			BindingResult result) {
 		Response<User> response = new Response<User>();
-		try{
+		try {
 			validateUpdateUser(user, result);
-			if(result.hasErrors()) {
+			if (result.hasErrors()) {
 				result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
 				return ResponseEntity.badRequest().body(response);
 			}
-			
+
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			User userPersisted = (User) userService.createOrUpdate(user);
 			response.setData(userPersisted);
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			response.getErrors().add(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
-			
+
 		}
-		
+
 		return ResponseEntity.ok(response);
 	}
-	
+
 	private void validateUpdateUser(User user, BindingResult result) {
-		if(user.getId() == null) {
+		if (user.getId() == null) {
 			result.addError(new ObjectError("User", "Id não informado"));
 		}
-		if(user.getEmail() == null) {
+		if (user.getEmail() == null) {
 			result.addError(new ObjectError("User", "Email não informado"));
 		}
 	}
-	
+
 	@GetMapping(value = "{id}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Response<User>> findById(@PathVariable("id") String id){
+	public ResponseEntity<Response<User>> findById(@PathVariable("id") String id) {
 		Response<User> response = new Response<User>();
 		User user = userService.findById(id);
-		if(user == null) {
+		if (user == null) {
 			response.getErrors().add("Registro não encontrado: " + id);
 			return ResponseEntity.badRequest().body(response);
 		}
 		response.setData(user);
 		return ResponseEntity.ok(response);
 	}
+
 	@DeleteMapping(value = "{id}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Response<String>> delete(@PathVariable("id") String id){
+	public ResponseEntity<Response<String>> delete(@PathVariable("id") String id) {
 		Response<String> response = new Response<String>();
 		User user = userService.findById(id);
-		if(user == null) {
+		if (user == null) {
 			response.getErrors().add("Registro não encontrado: " + id);
 			return ResponseEntity.badRequest().body(response);
 		}
 		userService.delete(id);
 		return ResponseEntity.ok(new Response<String>());
 	}
-	
-	public ResponseEntity<Response<Page<User>>> findAll(@PathVariable int page, @PathVariable int count){
+
+	@GetMapping(value = "{page}/{count}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<Response<Page<User>>> findAll(@PathVariable int page, @PathVariable int count) {
 		Response<Page<User>> response = new Response<Page<User>>();
 		Page<User> users = userService.findAll(page, count);
 		response.setData(users);
 		return ResponseEntity.ok(response);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

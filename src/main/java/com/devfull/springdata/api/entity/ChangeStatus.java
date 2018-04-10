@@ -1,5 +1,6 @@
 package com.devfull.springdata.api.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -9,7 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.devfull.springdata.api.enums.StatusEnum;
 
 @Document
-public class ChangeStatus {
+public class ChangeStatus implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String id;

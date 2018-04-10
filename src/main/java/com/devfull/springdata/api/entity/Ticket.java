@@ -1,5 +1,6 @@
 package com.devfull.springdata.api.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import com.devfull.springdata.api.enums.PriorityEnum;
 import com.devfull.springdata.api.enums.StatusEnum;
 
 @Document
-public class Ticket {
+public class Ticket implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String id;
@@ -33,7 +36,15 @@ public class Ticket {
 	@DBRef(lazy = true)
 	private User assingedUser;
 
-	private String desciption;
+	private String description;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	private String image;
 
@@ -104,13 +115,6 @@ public class Ticket {
 		this.assingedUser = assingedUser;
 	}
 
-	public String getDesciption() {
-		return desciption;
-	}
-
-	public void setDesciption(String desciption) {
-		this.desciption = desciption;
-	}
 
 	public String getImage() {
 		return image;

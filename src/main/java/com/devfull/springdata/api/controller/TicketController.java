@@ -112,7 +112,7 @@ public class TicketController {
 				ticket.setAssingedUser(ticketCurrent.getAssingedUser());
 			}
 
-			Ticket ticketPersisted = (Ticket) ticketService.createOrUpdate(ticketCurrent);
+			Ticket ticketPersisted = (Ticket) ticketService.createOrUpdate(ticket);
 			response.setData(ticketPersisted);
 
 		} catch (Exception e) {
@@ -187,13 +187,16 @@ public class TicketController {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping(value = "{page}/{count}/{number}/{title}/{status}/{priority}/{assigned}")
+	@PreAuthorize("hasAnyRole('CUSTOMER','TECHNICAL')")
 	public ResponseEntity<Response<Page<Ticket>>> findByParams(HttpServletRequest request,
-			@PathVariable("page") int page, @PathVariable("count") int count, @PathVariable("page") Integer number,
-			@PathVariable("page") String title, @PathVariable("page") String status,
-			@PathVariable("page") String priority, @PathVariable("page") boolean assigned) {
+			@PathVariable("page") int page, @PathVariable("count") int count, @PathVariable("number") Integer number,
+			@PathVariable("title") String title, @PathVariable("status") String status,
+			@PathVariable("priority") String priority, @PathVariable("assigned") boolean assigned) {
 		title = title.equals("Não informado") ? "" : title;
 		status = status.equals("Não informado") ? "" : status;
 		priority = priority.equals("Não informado") ? "" : priority;
+		//boolean assigned = false;
 
 		Response<Page<Ticket>> response = new Response<Page<Ticket>>();
 		Page<Ticket> tickets = null;
