@@ -96,7 +96,7 @@ public class UserController {
 
 	private void validateUpdateUser(User user, BindingResult result) {
 		if (user.getId() == null) {
-			result.addError(new ObjectError("User", "Id não informado"));
+			result.addError(new ObjectError("User", "Id indefinido"));
 		}
 		if (user.getEmail() == null) {
 			result.addError(new ObjectError("User", "Email não informado"));

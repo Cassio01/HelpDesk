@@ -36,7 +36,7 @@ import com.devfull.springdata.api.service.TicketService;
 import com.devfull.springdata.api.service.UserService;
 
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/api/ticket")
 @CrossOrigin(origins = "*")
 public class TicketController {
 
@@ -108,8 +108,8 @@ public class TicketController {
 			ticket.setUser(ticketCurrent.getUser());
 			ticket.setDate(ticketCurrent.getDate());
 			ticket.setNumber(ticketCurrent.getNumber());
-			if (ticketCurrent.getAssingedUser() != null) {
-				ticket.setAssingedUser(ticketCurrent.getAssingedUser());
+			if (ticketCurrent.getAssignedUser() != null) {
+				ticket.setAssignedUser(ticketCurrent.getAssignedUser());
 			}
 
 			Ticket ticketPersisted = (Ticket) ticketService.createOrUpdate(ticket);
@@ -124,7 +124,7 @@ public class TicketController {
 
 	private void validateUpdateTicket(Ticket ticket, BindingResult result) {
 		if (ticket.getId() == null) {
-			result.addError(new ObjectError("Ticket", "Id não foi informado"));
+			result.addError(new ObjectError("Ticket", "Id indefinido"));
 			return;
 		}
 		if (ticket.getTitle() == null) {
@@ -187,15 +187,15 @@ public class TicketController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping(value = "{page}/{count}/{number}/{title}/{status}/{priority}/{assigned}")
+	@GetMapping(value = "{page}/{count}/{number}/{title}/{status}/{priority}/{assignedUser}")
 	@PreAuthorize("hasAnyRole('CUSTOMER','TECHNICAL')")
 	public ResponseEntity<Response<Page<Ticket>>> findByParams(HttpServletRequest request,
 			@PathVariable("page") int page, @PathVariable("count") int count, @PathVariable("number") Integer number,
 			@PathVariable("title") String title, @PathVariable("status") String status,
-			@PathVariable("priority") String priority, @PathVariable("assigned") boolean assigned) {
-		title = title.equals("Não informado") ? "" : title;
-		status = status.equals("Não informado") ? "" : status;
-		priority = priority.equals("Não informado") ? "" : priority;
+			@PathVariable("priority") String priority, @PathVariable("assignedUser") boolean assignedUser) {
+		title = title.equals("uninformed") ? "" : title;
+		status = status.equals("uninformed") ? "" : status;
+		priority = priority.equals("uninformed") ? "" : priority;
 		//boolean assigned = false;
 
 		Response<Page<Ticket>> response = new Response<Page<Ticket>>();
@@ -205,7 +205,7 @@ public class TicketController {
 		} else {
 			User userRequest = userFromRequest(request);
 			if (userRequest.getProfile().equals(ProfileEnum.ROLE_TECHNICAL)) {
-				if (assigned) {
+				if (assignedUser) {
 					tickets = ticketService.findByParameterAndAssingedUser(page, count, title, status, priority,
 							userRequest.getId());
 				} else {
@@ -235,7 +235,7 @@ public class TicketController {
 			Ticket ticketCurrent = ticketService.findById(id);
 			ticketCurrent.setStatus(StatusEnum.getStatus(status));
 			if (status.equals("Assigned")) {
-				ticketCurrent.setAssingedUser(userFromRequest(request));
+				ticketCurrent.setAssignedUser(userFromRequest(request));
 			}
 
 			Ticket ticketPersisted = (Ticket) ticketService.createOrUpdate(ticketCurrent);
@@ -287,13 +287,13 @@ public class TicketController {
 				if (ticket.getStatus().equals(StatusEnum.Resolved)) {
 					amountResolved++;
 				}
-				if (ticket.getStatus().equals(StatusEnum.Aproved)) {
+				if (ticket.getStatus().equals(StatusEnum.Approved)) {
 					amountApproved++;
 				}
-				if (ticket.getStatus().equals(StatusEnum.Disaproved)) {
+				if (ticket.getStatus().equals(StatusEnum.Disapproved)) {
 					amountDisapproved++;
 				}
-				if (ticket.getStatus().equals(StatusEnum.Assinged)) {
+				if (ticket.getStatus().equals(StatusEnum.Assigned)) {
 					amountAssigned++;
 				}
 				if (ticket.getStatus().equals(StatusEnum.Closed)) {

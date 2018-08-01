@@ -31,13 +31,18 @@ public class Ticket implements Serializable{
 
 	private StatusEnum status;
 
+	private String image;
+	
 	private PriorityEnum priority;
 
 	@DBRef(lazy = true)
-	private User assingedUser;
-
+	private User assignedUser;
+ 
 	private String description;
 
+	@Transient
+	private List<ChangeStatus> changes;
+	
 	public String getDescription() {
 		return description;
 	}
@@ -45,11 +50,6 @@ public class Ticket implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	private String image;
-
-	@Transient
-	private List<ChangeStatus> changes;
 
 	public String getId() {
 		return id;
@@ -107,12 +107,12 @@ public class Ticket implements Serializable{
 		this.priority = priority;
 	}
 
-	public User getAssingedUser() {
-		return assingedUser;
+	public User getAssignedUser() {
+		return assignedUser;
 	}
 
-	public void setAssingedUser(User assingedUser) {
-		this.assingedUser = assingedUser;
+	public void setAssignedUser(User assignedUser) {
+		this.assignedUser = assignedUser;
 	}
 
 

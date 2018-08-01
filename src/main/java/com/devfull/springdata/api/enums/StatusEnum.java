@@ -3,19 +3,19 @@ package com.devfull.springdata.api.enums;
 public enum StatusEnum {
 
 	New,
-	Assinged,
+	Assigned,
 	Resolved,
-	Aproved,
-	Disaproved,
+	Approved,
+	Disapproved,
 	Closed;
 	
 	public static StatusEnum getStatus(String status) {
 		switch (status) {
 		case "New":return New;
-		case "Assinged" : return Assinged ;
+		case "Assigned" : return Assigned ;
 		case "Resolved" : return Resolved;
-		case "Aproved" : return Aproved;
-		case "Disaproved" : return Disaproved;
+		case "Approved" : return Approved;
+		case "Disapproved" : return Disapproved;
 		case "Closed" : return Closed;
 			
 		default: return New;
